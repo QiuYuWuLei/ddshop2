@@ -15,13 +15,13 @@
         //默认显示10条，这样的话就显示20条
         pageSize: 20,
         //分页列表
-        pageList: [20,50,100],
+        pageList: [10,20,50,100],
         columns:[[
             {field: 'ck', checkbox: true},
             {field:'id',title:'商品编号',width:100},
             {field:'title',title:'商品名称',width:100},
+            {field:'catName',title:'商品所属种类',width:100},
             {field:'price',title:'价格',width:100,align:'right'}
         ]]
     });
-
 </script>

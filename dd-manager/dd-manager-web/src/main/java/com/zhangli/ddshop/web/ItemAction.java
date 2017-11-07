@@ -1,6 +1,9 @@
 package com.zhangli.ddshop.web;
 
+import com.zhangli.ddshop.common.dto.Page;
+import com.zhangli.ddshop.common.dto.Result;
 import com.zhangli.ddshop.pojo.po.TbItem;
+import com.zhangli.ddshop.pojo.vo.TbItemCustom;
 import com.zhangli.ddshop.service.ItemService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +32,7 @@ public class ItemAction {
         return itemService.findById(itemId);
     }
 
-    @RequestMapping(value = "/items")
+   /* @RequestMapping(value = "/items")
     @ResponseBody
     public List<TbItem> listItems(){
         List<TbItem> list=null;
@@ -40,5 +43,19 @@ public class ItemAction {
             e.printStackTrace();
         }
         return  list;
-    }
+    }*/
+
+   //分页查询
+   @RequestMapping(value = "/items")
+   @ResponseBody
+    public Result<TbItemCustom>listItemsByPage(Page page){
+       Result<TbItemCustom> result=null;
+       try {
+           result=itemService.listItemsByPage(page);
+       }catch (Exception e){
+           logger.error(e.getMessage(),e);
+           e.printStackTrace();
+       }
+       return  result;
+   }
 }
