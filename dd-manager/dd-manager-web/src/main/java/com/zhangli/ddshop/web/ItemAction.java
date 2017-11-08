@@ -10,10 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -58,4 +55,47 @@ public class ItemAction {
        }
        return  result;
    }
+
+   //删除商品
+    @RequestMapping("/items/batch")
+    @ResponseBody
+    public int  updateBatch(@RequestParam("ids[]") List<Long> ids){
+        int result=0;
+        try {
+            result=itemService.updateBatch(ids);
+        }catch (Exception e){
+            logger.error(e.getMessage(),e);
+            e.printStackTrace();
+        }
+        return  result;
+    }
+
+    //上架商品
+    @RequestMapping("/items/batchUp")
+    @ResponseBody
+    public  int  updateBatchUp(@RequestParam("ids[]") List<Long> ids){
+        int result=0;
+        try {
+            result = itemService.updateBatchUp(ids);
+        }catch (Exception e){
+            logger.error(e.getMessage(),e);
+            e.printStackTrace();
+        }
+        return  result;
+    }
+
+
+    //下架商品
+    @RequestMapping("/items/batchDown")
+    @ResponseBody
+    public  int  updateBatchDown(@RequestParam("ids[]") List<Long> ids){
+        int result=0;
+        try {
+            result = itemService.updateBatchDown(ids);
+        }catch (Exception e){
+            logger.error(e.getMessage(),e);
+            e.printStackTrace();
+        }
+        return  result;
+    }
 }
