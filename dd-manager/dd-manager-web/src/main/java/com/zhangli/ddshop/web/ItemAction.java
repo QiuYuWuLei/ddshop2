@@ -1,5 +1,6 @@
 package com.zhangli.ddshop.web;
 
+import com.zhangli.ddshop.common.dto.Order;
 import com.zhangli.ddshop.common.dto.Page;
 import com.zhangli.ddshop.common.dto.Result;
 import com.zhangli.ddshop.pojo.po.TbItem;
@@ -45,10 +46,10 @@ public class ItemAction {
    //分页查询
    @RequestMapping(value = "/items")
    @ResponseBody
-    public Result<TbItemCustom>listItemsByPage(Page page){
+    public Result<TbItemCustom>listItemsByPage(Page page,Order order){
        Result<TbItemCustom> result=null;
        try {
-           result=itemService.listItemsByPage(page);
+           result=itemService.listItemsByPage(page,order);
        }catch (Exception e){
            logger.error(e.getMessage(),e);
            e.printStackTrace();

@@ -1,5 +1,6 @@
 package com.zhangli.ddshop.service.impl;
 
+import com.zhangli.ddshop.common.dto.Order;
 import com.zhangli.ddshop.common.dto.Page;
 import com.zhangli.ddshop.common.dto.Result;
 import com.zhangli.ddshop.dao.TbItemMapper;
@@ -42,14 +43,15 @@ public class ItemServiceImpl implements ItemService {
     }
 
 
+
     //分页查询
     @Override
-    public Result<TbItemCustom> listItemsByPage(Page page) {
+    public Result<TbItemCustom> listItemsByPage(Page page,Order order) {
        Result<TbItemCustom> result=new Result<>();
         try {
             int total = itemCustomDao.count();
             result.setTotal(total);
-            List<TbItemCustom> rows = itemCustomDao.listItemsByPage(page);
+            List<TbItemCustom> rows = itemCustomDao.listItemsByPage(page,order);
             result.setRows(rows);
         }catch (Exception e){
             logger.error(e.getMessage(),e);

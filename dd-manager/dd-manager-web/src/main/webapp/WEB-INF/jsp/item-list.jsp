@@ -41,6 +41,8 @@
         url: 'items',
         //隔行变色，斑马线效果
         striped:true,
+        //支持多列排序
+        multiSort:true,
         //添加分页工具栏
         pagination:true,
         //每行的前面显示行号
@@ -53,8 +55,8 @@
         pageList: [10,20,50,100],
         columns:[[
             {field: 'ck', checkbox: true},
-            {field:'id',title:'商品编号',width:100},
-            {field:'title',title:'商品名称',width:500},
+            {field:'id',title:'商品编号',width:100,sortable:true},
+            {field:'title',title:'商品名称',width:500,sortable:true},
             {field:'status',title:'状态',width:100,formatter:function (value,row,index) {
                 switch (value){
                     case 1:

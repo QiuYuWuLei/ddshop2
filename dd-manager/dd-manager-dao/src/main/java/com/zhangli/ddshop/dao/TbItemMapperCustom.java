@@ -1,7 +1,9 @@
 package com.zhangli.ddshop.dao;
 
+import com.zhangli.ddshop.common.dto.Order;
 import com.zhangli.ddshop.common.dto.Page;
 import com.zhangli.ddshop.pojo.vo.TbItemCustom;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -12,5 +14,5 @@ public interface TbItemMapperCustom {
     //查询所有记录数的总数
     int count();
 
-    List<TbItemCustom> listItemsByPage(Page page);
+    List<TbItemCustom> listItemsByPage(@Param("page") Page page,@Param("order") Order order);
 }

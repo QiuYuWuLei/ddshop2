@@ -9,12 +9,21 @@
         SELECT COUNT(*)FROM tb_item WHERE  status!=3;
     </select>
 
-    <select id="listItemsByPage" resultType="com.zhangli.ddshop.pojo.vo.TbItemCustom" parameterType="com.zhangli.ddshop.common.dto.Page">
+    <select id="listItemsByPage" resultType="com.zhangli.ddshop.pojo.vo.TbItemCustom" >
         SELECT<include refid="Base_Column_List" />
          FROM tb_item i LEFT JOIN tb_item_cat c
         ON i.cid=c.id
         WHERE  i.status!=3
-        ORDER BY i.id DESC
-        LIMIT #{offset},#{rows};
+        <choose>
+            <when test="order !=null and order.sort !=null and order.order !=null">
+                <foreach collection="order.orderParams" item="item" open="  ORDER BY" close="" separator=",">
+                    i.${item}
+                </foreach>
+            </when>
+            <otherwise>
+                ORDER BY i.id DESC
+            </otherwise>
+        </choose>
+        LIMIT #{page.offset},#{page.rows};
     </select>
 </mapper>

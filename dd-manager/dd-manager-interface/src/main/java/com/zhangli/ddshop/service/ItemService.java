@@ -1,5 +1,6 @@
 package com.zhangli.ddshop.service;
 
+import com.zhangli.ddshop.common.dto.Order;
 import com.zhangli.ddshop.common.dto.Page;
 import com.zhangli.ddshop.common.dto.Result;
 import com.zhangli.ddshop.pojo.po.TbItem;
@@ -11,7 +12,7 @@ public  interface  ItemService {
     TbItem findById (Long itemId);
     List<TbItem> listItems();
     //分页
-    Result<TbItemCustom> listItemsByPage(Page page);
+    Result<TbItemCustom> listItemsByPage(Page page, Order order);
     //删除商品
     int updateBatch(List<Long> ids);
 
