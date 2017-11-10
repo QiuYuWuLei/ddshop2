@@ -8,6 +8,7 @@ import com.zhangli.ddshop.dao.TbItemMapperCustom;
 import com.zhangli.ddshop.pojo.po.TbItem;
 import com.zhangli.ddshop.pojo.po.TbItemExample;
 import com.zhangli.ddshop.pojo.vo.TbItemCustom;
+import com.zhangli.ddshop.pojo.vo.TbItemQuery;
 import com.zhangli.ddshop.service.ItemService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,12 +47,12 @@ public class ItemServiceImpl implements ItemService {
 
     //分页查询
     @Override
-    public Result<TbItemCustom> listItemsByPage(Page page,Order order) {
+    public Result<TbItemCustom> listItemsByPage(Page page, Order order, TbItemQuery query) {
        Result<TbItemCustom> result=new Result<>();
         try {
-            int total = itemCustomDao.count();
+            int total = itemCustomDao.count(query);
             result.setTotal(total);
-            List<TbItemCustom> rows = itemCustomDao.listItemsByPage(page,order);
+            List<TbItemCustom> rows = itemCustomDao.listItemsByPage(page,order,query);
             result.setRows(rows);
         }catch (Exception e){
             logger.error(e.getMessage(),e);
@@ -60,6 +61,7 @@ public class ItemServiceImpl implements ItemService {
         return  result;
     }
 
+    //删除商品
     @Override
     public int updateBatch(List<Long> ids) {
         int result=0;
@@ -81,6 +83,7 @@ public class ItemServiceImpl implements ItemService {
         return  result;
     }
 
+    //上架商品
     @Override
     public int updateBatchUp(List<Long> ids) {
         int result=0;
@@ -103,6 +106,7 @@ public class ItemServiceImpl implements ItemService {
        return  result;
     }
 
+    //加下商品
     @Override
     public int updateBatchDown(List<Long> ids) {
         int result = 0;

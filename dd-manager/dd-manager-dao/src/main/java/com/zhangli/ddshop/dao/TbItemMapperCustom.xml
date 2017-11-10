@@ -5,19 +5,40 @@
        i. id, i.title, i.sell_point AS sellPoint,FORMAT( i.price/100,2) AS priceView, i.num, i.barcode,i. image, i.cid, i.status, i.created, i.updated,c.name AS  catName
 
     </sql>
+    <sql id="Where_Clause">
+        <where>
+            i.status !=3
+            <if test="query !=null and query.title !=null and query.title != ''">
+                AND  i.title LIKE '%${query.title}%'
+            </if>
+            <if test="query !=null and query.status !=null and query.status != 0">
+                AND  i.status=#{query.status}
+            </if>
+        </where>
+
+    </sql>
     <select id="count" resultType="int">
-        SELECT COUNT(*)FROM tb_item WHERE  status!=3;
+        SELECT COUNT(*)FROM tb_item i
+        <include refid="Where_Clause" />
     </select>
 
     <select id="listItemsByPage" resultType="com.zhangli.ddshop.pojo.vo.TbItemCustom" >
         SELECT<include refid="Base_Column_List" />
          FROM tb_item i LEFT JOIN tb_item_cat c
         ON i.cid=c.id
-        WHERE  i.status!=3
+        <include refid="Where_Clause" />
         <choose>
             <when test="order !=null and order.sort !=null and order.order !=null">
                 <foreach collection="order.orderParams" item="item" open="  ORDER BY" close="" separator=",">
-                    i.${item}
+                    <if test="item=='title desc'">
+                         CONVERT(i.title USING gbk) DESC
+                    </if>
+                    <if test="item=='title asc'">
+                         CONVERT(i.title USING gbk) ASC
+                    </if>
+                    <if test="item!='title desc' and item!='title asc'">
+                        i.${item}
+                    </if>
                 </foreach>
             </when>
             <otherwise>

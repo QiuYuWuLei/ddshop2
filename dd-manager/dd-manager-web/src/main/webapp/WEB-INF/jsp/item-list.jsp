@@ -1,46 +1,37 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
-
+<div id="toolbar">
+    <div style="padding: 5px; background-color: #fff;">
+        <label>商品标题:</label>
+        <input class="easyui-textbox" type="text" id="title"/>
+        <label>商品状态:</label>
+        <select id="status" class="easyui-combobox">
+            <option value="0">全部</option>
+            <option value="1">正常</option>
+            <option value="2">下架</option>
+        </select>
+        <button type="button" class="easyui-linkbutton" onclick="searchForm()">搜索</button>
+    </div>
+    <div>
+        <button type="button" class="easyui-linkbutton" onclick="" data-options="iconCls:'icon-add',plain:true">新增</button>
+        <button type="button" class="easyui-linkbutton" onclick="doDelete()" data-options="iconCls:'icon-remove',plain:true">删除</button>
+        <button type="button" class="easyui-linkbutton" onclick="" data-options="iconCls:'icon-edit',plain:true">编辑</button>
+        <button type="button" class="easyui-linkbutton" onclick="doUp()" data-options="iconCls:'icon-up',plain:true">上架</button>
+        <button type="button" class="easyui-linkbutton" onclick="doDown()" data-options="iconCls:'icon-down',plain:true">下架</button>
+        <button type="button" class="easyui-linkbutton" onclick="" data-options="iconCls:'icon-help',plain:true">帮助</button>
+    </div>
+</div>
 <table id="dg"></table>
 <script>
-    var toolbar=[{
-        iconCls:'icon-add',
-        text:'新增',
-        handler:function () {
-
-        }
-    },{
-        iconCls:'icon-remove',
-        text:'删除',
-        handler:function () {
-            doDelete();
-        }
-    },{
-        iconCls:'icon-edit',
-        text:'编辑',
-        handler:function () {
-
-        }
-    },{
-        iconCls:'icon-up',
-        text:'上架',
-        handler:function () {
-            doUp();
-        }
-    },{
-        iconCls:'icon-down',
-        text:'下架',
-        handler:function () {
-            doDown();
-        }
-    }];
     $('#dg').datagrid({
         //将工具栏添加到数据表格中
-        toolbar: toolbar,
+        toolbar:'#toolbar',
 
         url: 'items',
         //隔行变色，斑马线效果
         striped:true,
+        //使列自适应
+        fitColumns:true,
         //支持多列排序
         multiSort:true,
         //添加分页工具栏
@@ -55,8 +46,8 @@
         pageList: [10,20,50,100],
         columns:[[
             {field: 'ck', checkbox: true},
-            {field:'id',title:'商品编号',width:100,sortable:true},
-            {field:'title',title:'商品名称',width:500,sortable:true},
+            {field:'id',title:'商品编号',sortable:true},
+            {field:'title',title:'商品名称',sortable:true},
             {field:'status',title:'状态',width:100,formatter:function (value,row,index) {
                 switch (value){
                     case 1:
@@ -215,5 +206,10 @@
 
     }
 
-
+function searchForm() {
+    $("#dg").datagrid('load',{
+        title:$("#title").val(),
+        status:$("#status").combobox('getValue')
+    });
+}
 </script>

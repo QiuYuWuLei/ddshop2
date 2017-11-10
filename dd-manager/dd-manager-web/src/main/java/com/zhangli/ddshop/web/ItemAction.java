@@ -5,6 +5,7 @@ import com.zhangli.ddshop.common.dto.Page;
 import com.zhangli.ddshop.common.dto.Result;
 import com.zhangli.ddshop.pojo.po.TbItem;
 import com.zhangli.ddshop.pojo.vo.TbItemCustom;
+import com.zhangli.ddshop.pojo.vo.TbItemQuery;
 import com.zhangli.ddshop.service.ItemService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,10 +47,10 @@ public class ItemAction {
    //分页查询
    @RequestMapping(value = "/items")
    @ResponseBody
-    public Result<TbItemCustom>listItemsByPage(Page page,Order order){
+    public Result<TbItemCustom>listItemsByPage(Page page, Order order, TbItemQuery query){
        Result<TbItemCustom> result=null;
        try {
-           result=itemService.listItemsByPage(page,order);
+           result=itemService.listItemsByPage(page,order,query);
        }catch (Exception e){
            logger.error(e.getMessage(),e);
            e.printStackTrace();
