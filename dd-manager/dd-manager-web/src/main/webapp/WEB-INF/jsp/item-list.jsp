@@ -13,7 +13,7 @@
         <button type="button" class="easyui-linkbutton" onclick="searchForm()">搜索</button>
     </div>
     <div>
-        <button type="button" class="easyui-linkbutton" onclick="" data-options="iconCls:'icon-add',plain:true">新增</button>
+        <button type="button" class="easyui-linkbutton" onclick="doAdd()" data-options="iconCls:'icon-add',plain:true">新增</button>
         <button type="button" class="easyui-linkbutton" onclick="doDelete()" data-options="iconCls:'icon-remove',plain:true">删除</button>
         <button type="button" class="easyui-linkbutton" onclick="" data-options="iconCls:'icon-edit',plain:true">编辑</button>
         <button type="button" class="easyui-linkbutton" onclick="doUp()" data-options="iconCls:'icon-up',plain:true">上架</button>
@@ -164,6 +164,11 @@
 
     }
 
+
+    //增加商品
+    function  doAdd() {
+        addTab('新增商品','item-add');
+    }
 
     //下架
     function  doDown() {
