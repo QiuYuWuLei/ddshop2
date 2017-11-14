@@ -102,9 +102,16 @@ public class ItemAction {
     }
 
     //添加商品
-    @RequestMapping(value = "/item",method = RequestMethod.POST)
+    @RequestMapping(value = "/item")
     @ResponseBody
-    public int saveItem(TbItem tbItem,String desc){
-        return  itemService.saveItem(tbItem,desc);
+    public int saveItem(TbItem tbItem,String desc,String paramData){
+        int i = 0;
+        try {
+            i = itemService.saveItem(tbItem, desc, paramData);
+        }catch (Exception e){
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+        }
+        return i;
     }
 }

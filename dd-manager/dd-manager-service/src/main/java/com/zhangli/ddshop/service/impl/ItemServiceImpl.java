@@ -7,9 +7,11 @@ import com.zhangli.ddshop.common.util.IDUtils;
 import com.zhangli.ddshop.dao.TbItemDescMapper;
 import com.zhangli.ddshop.dao.TbItemMapper;
 import com.zhangli.ddshop.dao.TbItemMapperCustom;
+import com.zhangli.ddshop.dao.TbItemParamItemMapper;
 import com.zhangli.ddshop.pojo.po.TbItem;
 import com.zhangli.ddshop.pojo.po.TbItemDesc;
 import com.zhangli.ddshop.pojo.po.TbItemExample;
+import com.zhangli.ddshop.pojo.po.TbItemParamItem;
 import com.zhangli.ddshop.pojo.vo.TbItemCustom;
 import com.zhangli.ddshop.pojo.vo.TbItemQuery;
 import com.zhangli.ddshop.service.ItemService;
@@ -31,6 +33,8 @@ public class ItemServiceImpl implements ItemService {
     private TbItemMapperCustom itemCustomDao;
     @Autowired
     private TbItemDescMapper itemDescDao;
+    @Autowired
+    private TbItemParamItemMapper itemParamItemDao;
 
     @Override
     public TbItem findById(Long itemId) {
@@ -138,20 +142,33 @@ public class ItemServiceImpl implements ItemService {
 
     @Transactional
     @Override
-    public int saveItem(TbItem tbItem, String desc) {
-        Long id= IDUtils.genItemId();
-        tbItem.setId(id);
-        tbItem.setStatus((byte)1);
-        tbItem.setCreated(new Date());
-        tbItem.setUpdated(new Date());
-        int count = itemDao.insert(tbItem);
+    public int saveItem(TbItem tbItem, String desc,String paramData) {
+        int count=0;
+        try {
+            Long id= IDUtils.genItemId();
+            tbItem.setId(id);
+            tbItem.setStatus((byte)1);
+            tbItem.setCreated(new Date());
+            tbItem.setUpdated(new Date());
+            count = itemDao.insert(tbItem);
 
-        TbItemDesc itemDesc=new TbItemDesc();
-        itemDesc.setItemId(id);
-        itemDesc.setCreated(new Date());
-        itemDesc.setUpdated(new Date());
-        itemDesc.setItemDesc(desc);
-        count+=itemDescDao.insert(itemDesc);
+            TbItemDesc itemDesc=new TbItemDesc();
+            itemDesc.setItemId(id);
+            itemDesc.setCreated(new Date());
+            itemDesc.setUpdated(new Date());
+            itemDesc.setItemDesc(desc);
+            count+=itemDescDao.insert(itemDesc);
+
+            TbItemParamItem itemParamItem=new TbItemParamItem();
+            itemParamItem.setItemId(id);
+            itemParamItem.setCreated(new Date());
+            itemParamItem.setUpdated(new Date());
+            itemParamItem.setParamData(paramData);
+            count+=itemParamItemDao.insert(itemParamItem);
+        }catch (Exception e){
+            logger.error(e.getMessage(),e);
+            e.printStackTrace();
+        }
         return count;
     }
 }

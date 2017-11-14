@@ -88,6 +88,35 @@
             onSubmit:function () {
                 //给隐藏域设值ID属性，并且设值
                 $("#price").val($("#priceView").val()*100);
+
+                //获取参数规格部分
+                var paramsJson=[];
+                var $liList = $('#itemAddForm .paramsShow li');
+                $liList.each(function (i,e) {
+                    var $group = $(e).find('.group');
+                    var groupName = $group.text();
+                    var params = [];
+                    var $trParams = $(e).find('tr').has('td.param');
+                    $trParams.each(function (_i,_e) {
+                        var $keyTd = $(_e).find('.param');
+                        var $valueInput = $keyTd.next('td').find('input');
+                        var key = $keyTd.text();
+                        var value = $valueInput.val();
+
+                        var _o={
+                            k:key,
+                            v:value
+                        };
+                        params.push(_o);
+                    });
+                    var o={ };
+                    o.group=groupName;
+                    o.params=params;
+                    paramsJson.push(o);
+                });
+                paramsJson=JSON.stringify(paramsJson);
+                $('#paramData').val(paramsJson);
+
                 return $(this).form('validate');
             },
             success:function (data) {
@@ -132,7 +161,7 @@
                     'itemParam/query/'+node.id,
                     //success
                     function (data) {
-                        var $outerTd = $("#itemAddForm .paramsShow td").eq(1);
+                        var $outerTd = $('#itemAddForm .paramsShow td').eq(1);
                         var $ul=$('<ul>');
                         $outerTd.empty().append($ul);
                         if(data){
@@ -144,10 +173,12 @@
                                 var $table = $('<table>');
                                 var $tr=$('<tr>');
                                 var $td=$('<td colspan="2" class="group">'+groupName+'</td>');
-                                $ul.appendChild($li);
+                                $ul.append($li);
                                 $li.append($table);
                                 $table.append($tr);
                                 $tr.append($td);
+
+                                //遍历分组项
                                 if(e.params){
                                     $.each(e.params,function (_i,paramName) {
                                         var _$tr=$('<tr><td class="param">'+paramName+'</td><td><input></td></tr>');
@@ -155,6 +186,10 @@
                                     });
                                 }
                             });
+                            $("#itemAddForm .paramsShow").show();
+                        }else {
+                            $("#itemAddForm .paramsShow").hide();
+                            $("#itemAddForm .paramsShow td").eq(1).empty();//第二个td
                         }
                     }
                 );
