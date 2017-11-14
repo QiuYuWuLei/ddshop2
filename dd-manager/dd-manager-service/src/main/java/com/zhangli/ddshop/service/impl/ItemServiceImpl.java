@@ -3,9 +3,12 @@ package com.zhangli.ddshop.service.impl;
 import com.zhangli.ddshop.common.dto.Order;
 import com.zhangli.ddshop.common.dto.Page;
 import com.zhangli.ddshop.common.dto.Result;
+import com.zhangli.ddshop.common.util.IDUtils;
+import com.zhangli.ddshop.dao.TbItemDescMapper;
 import com.zhangli.ddshop.dao.TbItemMapper;
 import com.zhangli.ddshop.dao.TbItemMapperCustom;
 import com.zhangli.ddshop.pojo.po.TbItem;
+import com.zhangli.ddshop.pojo.po.TbItemDesc;
 import com.zhangli.ddshop.pojo.po.TbItemExample;
 import com.zhangli.ddshop.pojo.vo.TbItemCustom;
 import com.zhangli.ddshop.pojo.vo.TbItemQuery;
@@ -14,7 +17,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -24,6 +29,8 @@ public class ItemServiceImpl implements ItemService {
     private TbItemMapper itemDao;
     @Autowired
     private TbItemMapperCustom itemCustomDao;
+    @Autowired
+    private TbItemDescMapper itemDescDao;
 
     @Override
     public TbItem findById(Long itemId) {
@@ -127,5 +134,24 @@ public class ItemServiceImpl implements ItemService {
             e.printStackTrace();
         }
         return result;
+    }
+
+    @Transactional
+    @Override
+    public int saveItem(TbItem tbItem, String desc) {
+        Long id= IDUtils.genItemId();
+        tbItem.setId(id);
+        tbItem.setStatus((byte)1);
+        tbItem.setCreated(new Date());
+        tbItem.setUpdated(new Date());
+        int count = itemDao.insert(tbItem);
+
+        TbItemDesc itemDesc=new TbItemDesc();
+        itemDesc.setItemId(id);
+        itemDesc.setCreated(new Date());
+        itemDesc.setUpdated(new Date());
+        itemDesc.setItemDesc(desc);
+        count+=itemDescDao.insert(itemDesc);
+        return count;
     }
 }

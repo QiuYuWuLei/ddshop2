@@ -26,4 +26,8 @@ function addTab(text,href) {
     }
 }
 
+function  closeTab(text) {
+    $("#tab").tabs("close",text);
+}
+
 

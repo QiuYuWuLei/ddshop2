@@ -100,4 +100,11 @@ public class ItemAction {
         }
         return  result;
     }
+
+    //添加商品
+    @RequestMapping(value = "/item",method = RequestMethod.POST)
+    @ResponseBody
+    public int saveItem(TbItem tbItem,String desc){
+        return  itemService.saveItem(tbItem,desc);
+    }
 }

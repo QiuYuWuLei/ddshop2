@@ -22,4 +22,7 @@ public  interface  ItemService {
 
     //下架商品
     int updateBatchDown(List<Long> ids);
+
+    //添加商品
+    int saveItem(TbItem tbItem, String desc);
 }

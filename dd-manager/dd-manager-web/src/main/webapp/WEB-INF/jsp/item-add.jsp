@@ -48,7 +48,7 @@
             <tr>
                 <td colspan="2">
                     <!-- 加载编辑器的容器 -->
-                    <script id="container" name="content" type="text/plain">商品描述</script>
+                    <script id="container" name="desc" type="text/plain">商品描述</script>
                 </td>
             </tr>
 
@@ -74,6 +74,40 @@
     </form>
 </div>
 <script>
+    //重置表单
+    function clearForm() {
+        $("#itemAddForm").form('reset');
+        ue.setContent('商品描述');
+    }
+
+    //提交表单
+    function  submitForm(){
+        $("#itemAddForm").form('submit',{
+            //提交表单到item进行处理
+            url:'item',
+            onSubmit:function () {
+                //给隐藏域设值ID属性，并且设值
+                $("#price").val($("#priceView").val()*100);
+                return $(this).form('validate');
+            },
+            success:function (data) {
+                console.log('success');
+                if(data>0){
+                    $.messager.alert('消息','保存成功','info');
+                    addTab('查询商品','item-list');
+                    closeTab('新增商品');
+                }
+            }
+        });
+    }
+
+    //初始化之前删除原有内容
+    UE.delEditor('container');
+
+    //实例化富文本编辑器
+    var ue=UE.getEditor('container');
+
+    //加载商品类目的树形下拉框
     $("#cid").combotree({
         url:'itemCats?parentId=0',
         required:true,
@@ -91,7 +125,41 @@
             if (! isLeaf){
                 $.messager.alert('警告','请选中最终的类别','warning');
                 return false;
+            }else{
+                //如果是叶子节点，就发送ajax请求查询tb_item_param
+                $.get(
+                    //url
+                    'itemParam/query/'+node.id,
+                    //success
+                    function (data) {
+                        var $outerTd = $("#itemAddForm .paramsShow td").eq(1);
+                        var $ul=$('<ul>');
+                        $outerTd.empty().append($ul);
+                        if(data){
+                            var paramData = data.paramData;
+                            paramData=JSON.parse(paramData);
+                            $.each(paramData,function (i,e) {
+                                var  groupName=e.group;
+                                var $li=$('<li>');
+                                var $table = $('<table>');
+                                var $tr=$('<tr>');
+                                var $td=$('<td colspan="2" class="group">'+groupName+'</td>');
+                                $ul.appendChild($li);
+                                $li.append($table);
+                                $table.append($tr);
+                                $tr.append($td);
+                                if(e.params){
+                                    $.each(e.params,function (_i,paramName) {
+                                        var _$tr=$('<tr><td class="param">'+paramName+'</td><td><input></td></tr>');
+                                        $table.append(_$tr);
+                                    });
+                                }
+                            });
+                        }
+                    }
+                );
             }
         }
     });
+
 </script>
